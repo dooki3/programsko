@@ -2,47 +2,28 @@ package Model;
 
 import java.util.*;
 
-/**
- * 
- */
 public class Logic {
 
-    /**
-     * Default constructor
-     */
-    public Logic() {
+    private int bugCount;
+    private int runTime;
+
+    public Logic()
+    {
+
     }
 
-    /**
-     * 
-     */
-    private integer bugCount;
-
-    /**
-     * 
-     */
-    private integer runTime;
-
-
-
-    /**
-     * 
-     */
-    public void runAlgorithm() {
+    public void runAlgorithm()
+    {
         // TODO implement here
     }
 
-    /**
-     * 
-     */
-    public void categorize() {
+    public void categorize()
+    {
         // TODO implement here
     }
 
-    /**
-     * 
-     */
-    public void compareResults() {
+    public void compareResults()
+    {
         // TODO implement here
     }
 

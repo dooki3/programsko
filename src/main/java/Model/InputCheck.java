@@ -2,42 +2,25 @@ package Model;
 
 import java.util.*;
 
-/**
- * 
- */
 public class InputCheck {
 
-    /**
-     * Default constructor
-     */
-    public InputCheck() {
+    private String filePath;
+    public InputCheck()
+    {
     }
 
-    /**
-     * 
-     */
-    private string filePath;
-
-
-
-    /**
-     * 
-     */
-    public void checkExtension() {
+    public void checkExtension()
+    {
         // TODO implement here
     }
 
-    /**
-     * 
-     */
-    public void fileIsEmpty() {
+    public void fileIsEmpty()
+    {
         // TODO implement here
     }
 
-    /**
-     * 
-     */
-    public void checkAttributes() {
+    public void checkAttributes()
+    {
         // TODO implement here
     }
 
