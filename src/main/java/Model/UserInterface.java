@@ -17,9 +17,8 @@ public class UserInterface {
     {
         DataInput wekaService = new DataInput();
         try {
-            wekaService.loadFile("D:\\Sve\\cpu.arff");
-
-            wekaService.naiveBayes();
+            wekaService.loadFile("C:\\Users\\dinok\\Desktop\\seipJDT\\JDT_R2_0.csv");
+            wekaService.gaussianProcesses();
         } catch (Exception e) {
             e.printStackTrace();
         }
