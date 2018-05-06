@@ -1,0 +1,131 @@
+.parent{
+    -fx-background-color: #2A2E37;
+}
+.sidebar{
+    -fx-background-color: #373E48;
+}
+.buttons{
+    -fx-background-color: transparent;    
+}
+.buttons:hover{
+    -fx-background-color: transparent;
+    -fx-border-color: #1FD6D1;
+    -fx-border-style: solid;
+    -fx-border-width: 0px 0px 0px 3px;
+}
+
+.setting{
+    -fx-fill:grey;
+}
+.setting:hover{
+    -fx-fill:white;
+}
+
+.eye{
+    -fx-background-color: #1FD6D1;
+}
+
+.eye:hover{
+    -fx-background-color: #1FD6D1;
+}
+.roundLabel{
+    -fx-background-color: transparent;
+    -fx-background-radius: 100%;
+    -fx-border-color: #999999;
+    -fx-border-radius: 100%;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+}
+.roundLabel:hover{
+    -fx-background-color: transparent;
+    -fx-background-radius: 100%;
+    -fx-border-color: #999999;
+    -fx-border-radius: 100%;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+}
+.roundLabel:selected{
+    -fx-background-color: transparent;
+    -fx-background-radius: 100%;
+    -fx-border-color: #999999;
+    -fx-border-radius: 100%;
+    -fx-border-width: 2px;
+    -fx-border-style: solid;
+}
+
+.box{
+    -fx-background-color: #2A2E37;
+    -fx-opacity:0.7;
+}
+.box:hover{
+    -fx-background-color: #373E48;
+    -fx-opacity:1;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-border-color: #1FD6D1;
+    -fx-border-style: solid;    
+}
+
+.progressbar{
+    -fx-background-color: transparent;
+    -fx-background-radius: 0px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.chart {
+    -fx-padding: 10px;
+    /*-fx-background-image: url("icon.png");*/   
+}
+.chart-content {
+    -fx-padding: 30px;    
+}
+ 
+.chart-title {
+  -fx-text-fill: #4682b4;
+  -fx-font-size: 1.2em;
+}
+ 
+.axis-label {
+    -fx-text-fill: #ffffff;
+}
+
+.chart-legend {
+   -fx-background-color:  transparent;
+   -fx-padding: 20px;
+}
+ 
+.chart-legend-item-symbol{
+    -fx-display:false;
+   -fx-background-radius: 0;
+}
+ 
+.chart-legend-item{
+    -fx-text-fill: #999999;
+}
+ 
+.chart-plot-background {
+    -fx-background-color: #2A2E37;
+}
+.chart-vertical-grid-lines {
+    -fx-stroke: #2A2E37;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #2A2E37;
+}
+.chart-alternative-row-fill {
+    -fx-fill: transparent;
+    -fx-stroke: transparent;
+    -fx-stroke-width: 0;
+}

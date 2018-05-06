@@ -1,4 +1,4 @@
-package Model;
+package WEKALogic;
 
 import java.util.*;
 import java.io.*;
@@ -15,12 +15,8 @@ import weka.filters.unsupervised.attribute.Remove;
 
 public class DataInput {
 
-    private File file;
-    private int fileCount;
-    private String savePath;
-    private String[] removeOptionsArray;
+    private static int fileCount;
     Remove remove;
-    //private BufferedReader buffReader = null;
 
     private DataSource source;
     private Instances data;
@@ -29,11 +25,14 @@ public class DataInput {
     public DataInput()
     {
         initializeOptionArray();
+        fileCount = 0;
     }
 
     private void initializeOptionArray()
     {
-        int[] indicesOfColumnsToUse = new int[] {0, 49};
+        // This array is to be changed on demand, representative of the Attributes we wish to compare in our algorithm
+        // In our .csv files, this specific value refers to "bug_cnt" attribute
+        int[] indicesOfColumnsToUse = new int[] {49};
         remove = new Remove();
         remove.setAttributeIndicesArray(indicesOfColumnsToUse);
         remove.setInvertSelection(true);
@@ -43,11 +42,9 @@ public class DataInput {
     {
         source = new DataSource(filepath);
 
-        // Note: Why does this need to be instanced twice? Is there a workaround for double the loading?
         data = source.getDataSet();
         remove.setInputFormat(data);
         data = Filter.useFilter(data, remove);
-        //
         data.setClassIndex(data.numAttributes() - 1);
     }
 
@@ -81,9 +78,9 @@ public class DataInput {
         System.out.println(eval.fMeasure(1) + " " + eval.precision(1) + " " + eval.recall(1));
     }
 
-    public void getFileCount()
+    public int getFileCount()
     {
-        // TODO implement here
+        return this.fileCount;
     }
     public void checkFile()
     {

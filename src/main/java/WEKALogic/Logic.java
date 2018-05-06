@@ -1,4 +1,4 @@
-package Model;
+package WEKALogic;
 
 import java.util.*;
 

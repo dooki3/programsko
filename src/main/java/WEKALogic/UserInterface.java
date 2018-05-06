@@ -1,7 +1,7 @@
-package Model;
+package WEKALogic;
 
-import javax.swing.*;
-import java.util.*;
+import JavaFX.JavaFXApplication6;
+import javafx.application.Application;
 
 public class UserInterface {
 /*
@@ -11,17 +11,21 @@ public class UserInterface {
     private JButton button;
 */
 
+    static Thread t1 = new Thread(() -> Application.launch(JavaFXApplication6.class));
 
 
     public static void main(String [] args)
     {
-        DataInput wekaService = new DataInput();
+        t1.start();
+
+        /*
+        WEKALogic.DataInput wekaService = new WEKALogic.DataInput();
         try {
             wekaService.loadFile("C:\\Users\\dinok\\Desktop\\seipJDT\\JDT_R2_0.csv");
             wekaService.gaussianProcesses();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
 }

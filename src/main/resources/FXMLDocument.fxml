@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="830.0" styleClass="parent" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.FXMLDocumentController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="-1.0" prefHeight="455.0" prefWidth="66.0" styleClass="sidebar">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="buttons">
+               <children>
+                  <ImageView fx:id="homeButton" fitHeight="24.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@ikone/if_Streamline-18_185038.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" styleClass="buttons">
+               <children>
+                  <ImageView fx:id="addFileButton" fitHeight="28.0" fitWidth="23.0" onMouseClicked="#addFileClicked" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@ikone/if_document_text_add_103511.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" styleClass="buttons">
+               <children>
+                  <ImageView fitHeight="28.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@ikone/if_Iconfinder_0009_Shape-240_169906.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="210.0" prefHeight="100.0" prefWidth="200.0" styleClass="buttons" />
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="310.0" prefHeight="100.0" prefWidth="200.0" styleClass="buttons">
+               <children>
+                  <ImageView fx:id="settingsButton" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@ikone/if_Streamline-75_185095.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox fx:id="runButton" alignment="CENTER" layoutX="10.0" layoutY="192.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #66ffff;" styleClass="buttons">
+               <children>
+                  <ImageView fx:id="runButtonIcon" onMouseClicked="#runAlgorithmsClicked" fitHeight="28.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@ikone/if_icon-play_211876.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </HBox>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="65.0" prefHeight="455.0" prefWidth="43.0" />
+      <LineChart layoutX="112.0" layoutY="1.0" prefHeight="308.0" prefWidth="681.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <VBox alignment="CENTER" layoutX="112.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="180.0" stylesheets="@style.css">
+         <children>
+            <ImageView fitHeight="26.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@ikone/Green_Arrow_Top-512.png" />
+               </image>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="30%" />
+            <ProgressBar prefHeight="13.0" prefWidth="119.0" progress="0.24" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="chart-title" text="Pokazatelj za nesto " wrappingWidth="169.89605379537426" />
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="291.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="180.0">
+         <children>
+            <ImageView fitHeight="26.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@ikone/Red_Arrow_Down-512.png" />
+               </image>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="70%" />
+            <ProgressBar prefHeight="20.0" prefWidth="123.0" progress="0.24" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="chart-title" text="Pokazatelj za nesto " wrappingWidth="169.89605379537426" />
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="471.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="180.0">
+         <children>
+            <ImageView fitHeight="26.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@ikone/Red_Arrow_Down-512.png" />
+               </image>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="15%" />
+            <ProgressBar prefHeight="20.0" prefWidth="114.0" progress="0.24" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="chart-title" text="Pokazatelj za nesto " wrappingWidth="169.89605379537426" />
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="636.0" layoutY="294.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="160.0" prefWidth="180.0">
+         <children>
+            <ImageView fitHeight="26.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@ikone/Green_Arrow_Top-512.png" />
+               </image>
+            </ImageView>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="15%" />
+            <ProgressBar prefHeight="20.0" prefWidth="122.0" progress="0.24" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="chart-title" text="Pokazatelj za nesto " wrappingWidth="169.89605379537426" />
+         </children>
+      </VBox>
+      <HBox alignment="CENTER" layoutX="794.0" layoutY="1.0" prefHeight="26.0" prefWidth="32.0" />
+   </children>
+</AnchorPane>
