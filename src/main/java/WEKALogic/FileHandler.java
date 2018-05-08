@@ -72,4 +72,11 @@ public class FileHandler
     {
         this.fileName = fileName;
     }
+    public void decreaseFileCount()
+    {
+        if(fileCount > 0)
+        {
+            fileCount--;
+        }
+    }
 }

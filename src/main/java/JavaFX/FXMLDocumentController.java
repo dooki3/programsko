@@ -16,6 +16,7 @@ import WEKALogic.FileHandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXML;
@@ -38,21 +39,29 @@ public class FXMLDocumentController implements Initializable {
     private AlgorithmsWEKA WEKA = new AlgorithmsWEKA();
     private ObservableList<String> options;
     private FileHandler currentlySelectedFile = null;
+    private int currentFileIndex;
 
+    @FXML
+    private Button RemoveBtn;
     @FXML
     private ComboBox FilesComboBox;
     @FXML
     private Label label;
     @FXML
-    private void removeSelectedFile(ActionEvent e)
+    private void removeSelectedFile(ActionEvent e1)
     {
-        options.remove(currentlySelectedFile.getFileName());
-        FilesComboBox.setItems(options);
-        if(currentlySelectedFile != null)
+        if(e1.getSource().equals(RemoveBtn))
         {
-            currentlySelectedFile.removeFileInstance();
+            if(currentlySelectedFile != null)
+            {
+                currentlySelectedFile.decreaseFileCount();
+                currentlySelectedFile.removeFileInstance();
+                fileHandlers.remove(currentFileIndex);
+            }
+            options.remove(currentlySelectedFile.getFileName());
+            FilesComboBox.setItems(options);
+            FilesComboBox.getItems();
         }
-        FilesComboBox.getItems();
     }
     @FXML
     private void zatvori(ActionEvent event) {
@@ -63,11 +72,14 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void comboBoxChanged(ActionEvent e)
     {
-        String currentFile = (String) FilesComboBox.getValue();
-        currentlySelectedFile = findFileByName(currentFile, fileHandlers);
-        if(currentlySelectedFile != null)
+        if(e.getSource().equals(FilesComboBox))
         {
-            System.out.println(currentlySelectedFile.getFileName());
+            String currentFile = (String) FilesComboBox.getValue();
+            currentlySelectedFile = findFileByName(currentFile, fileHandlers);
+            if(currentlySelectedFile != null)
+            {
+                System.out.println("Currently selected file: " + currentlySelectedFile.getFileName());
+            }
         }
     }
 
@@ -104,6 +116,7 @@ public class FXMLDocumentController implements Initializable {
         options.add(selectedFile.getName());
         FilesComboBox.setItems(options);
         FilesComboBox.getItems();
+        currentlySelectedFile = newFile;
 
         System.out.println("Successfully loaded file " + selectedFile.getName() + "!");
         System.out.println("Currently " + fileHandlers.size() + " files are loaded in the programs memory");
@@ -129,6 +142,7 @@ public class FXMLDocumentController implements Initializable {
         {
             if(list.get(i).getFileName().equals(filename))
             {
+                currentFileIndex = i;
                 return list.get(i);
             }
         }
