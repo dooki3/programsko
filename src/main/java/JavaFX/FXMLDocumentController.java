@@ -91,6 +91,7 @@ public class FXMLDocumentController implements Initializable {
                 new ExtensionFilter("CSV files", "*.csv"),
                 new ExtensionFilter("ARFF files", "*.arff"));
         File selectedFile = fc.showOpenDialog(null);
+        System.out.println(selectedFile.getAbsolutePath());
 
         if(selectedFile != null)
         {
@@ -128,7 +129,8 @@ public class FXMLDocumentController implements Initializable {
     {
         t1 = new Thread(() -> {
             try {
-                WEKA.gaussianProcesses(currentlySelectedFile.getData());
+                //WEKA.gaussianProcesses(currentlySelectedFile.getData());
+                WEKA.naiveBayes(currentlySelectedFile.getData());
             } catch (Exception e1) {
                 e1.printStackTrace();
             }

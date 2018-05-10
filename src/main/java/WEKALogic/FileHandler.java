@@ -1,14 +1,25 @@
 package WEKALogic;
 
+import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.NumericToNominal;
 import weka.filters.unsupervised.attribute.Remove;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FileHandler
 {
     private static int fileCount = 0;
     private String fileName;
+
+    public List<Instance> getInstanceList() {
+        return instanceList;
+    }
+
+    private List<Instance> instanceList = new ArrayList();
     Remove remove;
 
     private ConverterUtils.DataSource source;
@@ -32,12 +43,17 @@ public class FileHandler
     public void loadFile(String filepath) throws Exception
     {
         source = new ConverterUtils.DataSource(filepath);
-
         data = source.getDataSet();
         remove.setInputFormat(data);
         data = Filter.useFilter(data, remove);
+        data = convertToNominal(data);
         data.setClassIndex(data.numAttributes() - 1);
 
+        for (int i = 0; i < data.numInstances(); i++) {
+            instanceList.add(data.get(i));
+        }
+        System.out.println("No. of instances: " + instanceList.size());
+        //System.out.println(instanceList.get(0).attribute(0).value());
         fileCount++;
     }
 
@@ -78,5 +94,38 @@ public class FileHandler
         {
             fileCount--;
         }
+    }
+    // Converting bug_cnt to nominal values
+    private Instances convertToNominal(Instances instance)
+    {
+        Instances newInstance = null;
+        NumericToNominal convert = new NumericToNominal();
+        String[] options = new String[2];
+        options[0] = "-R";
+        options[1] = "1";
+
+        try
+        {
+            convert.setOptions(options);
+            convert.setInputFormat(instance);
+            newInstance = Filter.useFilter(instance, convert);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        /*
+        System.out.println("Before");
+        for(int i=0; i<1; i=i+1)
+        {
+            System.out.println("Nominal? "+instance.attribute(i).isNominal());
+        }
+
+        System.out.println("After");
+        for(int i=0; i<1; i=i+1)
+        {
+            System.out.println("Nominal? "+newInstance.attribute(i).isNominal());
+        }
+        */
+        return newInstance;
     }
 }
