@@ -9,8 +9,6 @@ import java.util.List;
 
 public class ProcessData {
 
-    private int bugCount;
-    private int runTime;
     private List<Instances> listOfFiles = new ArrayList();
     private Instances prunedDataset;
 
@@ -18,11 +16,12 @@ public class ProcessData {
     {
 
     }
-
+    /*
     public void addFile(Instances file)
     {
         listOfFiles.add(file);
     }
+    */
     //prunedDataSet = buildPredictionModel(listOfFiles.get(0), listOfFiles.get(1));
    /*
     private Instances pruneDataSet(Instances first, Instances second)
@@ -31,8 +30,13 @@ public class ProcessData {
         return new Instances(null);
     }
 */
-    public void buildPredictionModel(ArrayList listaFajlovaKojeZelimoObraditi)
+    public void buildPredictionModel(List<Instances> list)
     {
         // TODO: Build prediction model
+
+    }
+
+    public Instances getPrunedDataset() {
+        return prunedDataset;
     }
 }

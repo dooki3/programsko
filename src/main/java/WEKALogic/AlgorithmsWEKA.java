@@ -13,6 +13,8 @@ import java.util.Random;
 
 public class AlgorithmsWEKA
 {
+    private String result = "";
+
     public void gaussianProcesses(Instances data) throws Exception
     {
         GaussianProcesses gp = new GaussianProcesses();
@@ -20,7 +22,7 @@ public class AlgorithmsWEKA
         System.out.println(gp.toString());
     }
 
-    public void naiveBayesAlternative(Instances data, ConverterUtils.DataSource source) throws Exception        // Doesn't work with numerical datasets
+    public void naiveBayesAlternative(Instances data, ConverterUtils.DataSource source) throws Exception
     {
         NaiveBayesUpdateable nb = new NaiveBayesUpdateable();
         nb.buildClassifier(data);
@@ -33,13 +35,18 @@ public class AlgorithmsWEKA
         System.out.println(nb);
     }
 
-    public void naiveBayes(Instances data) throws Exception                   // Doesn't work with numerical datasets
+    public void naiveBayes(Instances data) throws Exception
     {
         NaiveBayes nB = new NaiveBayes();
         nB.buildClassifier(data);
         Evaluation eval = new Evaluation(data);
         eval.crossValidateModel(nB, data, 10, new Random(1));
         System.out.println(eval.toSummaryString("\nResults\n=======\n", true));
-        System.out.println(eval.fMeasure(1) + " " + eval.precision(1) + " " + eval.recall(1));
+        result = eval.toSummaryString("\nResults\n=======\n", true);
+    }
+
+    public String toString()
+    {
+        return this.result;
     }
 }

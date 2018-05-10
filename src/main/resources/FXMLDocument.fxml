@@ -3,13 +3,16 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="1036.0" styleClass="parent" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.FXMLDocumentController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="1036.0" styleClass="parent" stylesheets="@style.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="JavaFX.FXMLDocumentController">
    <children>
       <VBox alignment="TOP_CENTER" layoutX="-1.0" prefHeight="455.0" prefWidth="66.0" styleClass="sidebar">
          <children>
@@ -33,7 +36,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" styleClass="buttons">
                <children>
-                  <ImageView fitHeight="28.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="pruneData" fitHeight="28.0" fitWidth="24.0" onMouseClicked="#onPruneClicked" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@ikone/if_Iconfinder_0009_Shape-240_169906.png" />
                      </image>
@@ -69,7 +72,17 @@
       </VBox>
       <VBox alignment="CENTER" layoutX="65.0" prefHeight="455.0" prefWidth="43.0" />
       <HBox alignment="CENTER" layoutX="794.0" layoutY="1.0" prefHeight="26.0" prefWidth="32.0" />
-      <ComboBox id="FilesComboBox" fx:id="FilesComboBox" layoutX="872.0" layoutY="27.0" onAction="#comboBoxChanged" prefWidth="150.0" />
-      <Button fx:id="RemoveBtn" layoutX="788.0" layoutY="27.0" mnemonicParsing="false" onAction="#removeSelectedFile" text="Remove file" />
+
+      <ScrollPane layoutX="87.0" layoutY="59.0" prefHeight="200.0" prefWidth="114.0">
+        <content>
+           <VBox fx:id="checkBoxes" layoutX="108.0" layoutY="80.0" prefHeight="200.0" prefWidth="100.0" />
+        </content>
+      </ScrollPane>
+      <ToolBar layoutX="87.0" layoutY="14.0" prefHeight="35.0" prefWidth="245.0">
+         <items>
+            <Button fx:id="RemoveBtn" mnemonicParsing="false" onAction="#removeSelectedFile" text="Remove file" />
+            <ComboBox id="FilesComboBox" fx:id="FilesComboBox" onAction="#comboBoxChanged" prefWidth="150.0" />
+         </items></ToolBar>
+      <TextArea fx:id="textOutputArea" layoutX="210.0" layoutY="60.0" prefHeight="399.0" prefWidth="774.0" />
    </children>
 </AnchorPane>

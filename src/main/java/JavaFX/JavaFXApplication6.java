@@ -20,6 +20,7 @@ public class JavaFXApplication6 extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+
         Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("FXMLDocument.fxml"));
         Scene scene = new Scene(root);
         stage.setTitle("Analiza algoritama");
