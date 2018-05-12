@@ -1,5 +1,5 @@
 package WEKALogic;
-// This class is where the WEKA data mining algorithms are to be implemented
+
 
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
@@ -13,16 +13,19 @@ import java.util.Random;
 
 public class AlgorithmsWEKA
 {
-    private String result = "";
+    private String trainModelResult = "";
+    private String testResult = "";
+    private NaiveBayes nB = null;
 
-    public void gaussianProcesses(Instances data) throws Exception
+
+    protected void gaussianProcesses(Instances data) throws Exception
     {
         GaussianProcesses gp = new GaussianProcesses();
         gp.buildClassifier(data);
         System.out.println(gp.toString());
     }
 
-    public void naiveBayesAlternative(Instances data, ConverterUtils.DataSource source) throws Exception
+    protected void naiveBayesAlternative(Instances data, ConverterUtils.DataSource source) throws Exception
     {
         NaiveBayesUpdateable nb = new NaiveBayesUpdateable();
         nb.buildClassifier(data);
@@ -35,18 +38,38 @@ public class AlgorithmsWEKA
         System.out.println(nb);
     }
 
-    public void naiveBayes(Instances data) throws Exception
+    protected void naiveBayesCrossValidate(Instances instance) throws Exception
     {
         NaiveBayes nB = new NaiveBayes();
-        nB.buildClassifier(data);
-        Evaluation eval = new Evaluation(data);
-        eval.crossValidateModel(nB, data, 10, new Random(1));
-        System.out.println(eval.toSummaryString("\nResults\n=======\n", true));
-        result = eval.toSummaryString("\nResults\n=======\n", true);
+        nB.buildClassifier(instance);
+        Evaluation eval = new Evaluation(instance);
+        eval.crossValidateModel(nB, instance, 10, new Random(1));
+        trainModelResult = eval.toSummaryString("\nResults of training\n=======\n", true);
+    }
+    protected void naiveBayes(Instances train, Instances test) throws Exception
+    {
+        nB = new NaiveBayes();
+        nB.buildClassifier(train);
+        Evaluation eval = new Evaluation(train);
+        if(!train.equalHeaders(test))
+        {
+            /*
+            for(int i = 0; i < test.size(); i++)
+            {
+                // Doesn't currently work
+                test.get(i).replaceMissingValues(new double[]{0});
+            }
+            */
+        }
+        eval.evaluateModel(nB, test);
+        testResult = eval.toSummaryString("\nResults of testing\n=======\n", true);
     }
 
-    public String toString()
-    {
-        return this.result;
+    public String getTrainResult() {
+        return trainModelResult;
+    }
+
+    public String getTestResult() {
+        return testResult;
     }
 }

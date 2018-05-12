@@ -6,6 +6,7 @@ import weka.core.converters.ConverterUtils;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.NumericToNominal;
 import weka.filters.unsupervised.attribute.Remove;
+import weka.filters.unsupervised.attribute.StringToNominal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +15,8 @@ public class FileHandler
 {
     private static int fileCount = 0;
     private String fileName;
-
-    public List<Instance> getInstanceList() {
-        return instanceList;
-    }
-
-    private List<Instance> instanceList = new ArrayList();
     Remove remove;
-
+    private List<Instance> instanceList = new ArrayList();
     private ConverterUtils.DataSource source;
     private Instances data;
 
@@ -34,7 +29,7 @@ public class FileHandler
     {
         // This array is to be changed on demand, representative of the Attributes we wish to compare in our algorithm
         // In our .csv files, this specific value refers to "bug_cnt" attribute
-        int[] indicesOfColumnsToUse = new int[] {49};
+        int[] indicesOfColumnsToUse = new int[] {0, 49};
         remove = new Remove();
         remove.setAttributeIndicesArray(indicesOfColumnsToUse);
         remove.setInvertSelection(true);
@@ -46,7 +41,7 @@ public class FileHandler
         data = source.getDataSet();
         remove.setInputFormat(data);
         data = Filter.useFilter(data, remove);
-        data = convertToNominal(data);
+        data = numericToNominal(data);
         data.setClassIndex(data.numAttributes() - 1);
 
         for (int i = 0; i < data.numInstances(); i++) {
@@ -95,14 +90,14 @@ public class FileHandler
             fileCount--;
         }
     }
-    // Converting bug_cnt to nominal values
-    private Instances convertToNominal(Instances instance)
+    // Converting numeric to nominal values
+    protected static Instances numericToNominal(Instances instance)
     {
         Instances newInstance = null;
         NumericToNominal convert = new NumericToNominal();
         String[] options = new String[2];
         options[0] = "-R";
-        options[1] = "1";
+        options[1] = "2";
 
         try
         {
@@ -113,19 +108,46 @@ public class FileHandler
         {
             e.printStackTrace();
         }
-        /*
+        /*  Only for debugging purposes
         System.out.println("Before");
-        for(int i=0; i<1; i=i+1)
+        for(int i=0; i<2; i=i+1)
         {
             System.out.println("Nominal? "+instance.attribute(i).isNominal());
         }
 
         System.out.println("After");
-        for(int i=0; i<1; i=i+1)
+        for(int i=0; i<2; i=i+1)
         {
             System.out.println("Nominal? "+newInstance.attribute(i).isNominal());
-        }
-        */
+        }*/
+
         return newInstance;
     }
+
+    protected static Instances stringToNominal(Instances instance)
+    {
+        Instances newInstance = null;
+        StringToNominal convert = new StringToNominal();
+        String[] options = new String[2];
+        options[0] = "-R";
+        options[1] = "1-2";
+
+        try
+        {
+            convert.setOptions(options);
+            convert.setInputFormat(instance);
+            newInstance = Filter.useFilter(instance, convert);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return newInstance;
+    }
+
+    public List<Instance> getInstanceList()
+    {
+        return instanceList;
+    }
+
 }

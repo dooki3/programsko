@@ -42,7 +42,7 @@ public class FXMLDocumentController implements Initializable {
     private ObservableList<String> options;
     private List<FileHandler> fileHandlers = new ArrayList<>();
     private FileChooser fc;
-    private AlgorithmsWEKA WEKA = new AlgorithmsWEKA();
+    //private AlgorithmsWEKA WEKA = new AlgorithmsWEKA();
     private FileHandler currentlySelectedFile = null;
     private ProcessData dataPruner = new ProcessData();
     private int currentFileIndex;
@@ -102,8 +102,7 @@ public class FXMLDocumentController implements Initializable {
     {
         t2 = new Thread(() ->
         {
-            List<Instances> files = getSelectedFiles(fileHandlers);
-            //dataPruner.buildPredictionModel(files);
+            //dataPruner.buildPredictionModel(getSelectedFiles(fileHandlers));
         });
         t2.start();
     }
@@ -165,8 +164,10 @@ public class FXMLDocumentController implements Initializable {
         {
             try
             {
-                WEKA.naiveBayes(currentlySelectedFile.getData());
-                textOutputArea.setText(textOutputArea.getText() + "\n" + WEKA.toString());
+                dataPruner.buildPredictionModel(getSelectedFiles(fileHandlers));
+                textOutputArea.setText(textOutputArea.getText() + "\n" + dataPruner.getTrainResult() +
+                        "\n\n" + dataPruner.getTestResult());
+                textOutputArea.positionCaret(textOutputArea.getLength());
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
