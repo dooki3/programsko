@@ -46,21 +46,27 @@ public class AlgorithmsWEKA
         eval.crossValidateModel(nB, instance, 10, new Random(1));
         trainModelResult = eval.toSummaryString("\nResults of training\n=======\n", true);
     }
+
     protected void naiveBayes(Instances train, Instances test) throws Exception
     {
+        train.setClassIndex(train.numAttributes() - 1);
+        test.setClassIndex(test.numAttributes() - 1);
         nB = new NaiveBayes();
         nB.buildClassifier(train);
         Evaluation eval = new Evaluation(train);
-        if(!train.equalHeaders(test))
+        /*if(!train.equalHeaders(test))
         {
-            /*
-            for(int i = 0; i < test.size(); i++)
-            {
-                // Doesn't currently work
-                test.get(i).replaceMissingValues(new double[]{0});
-            }
-            */
+            System.out.println(train.equalHeadersMsg(test));
+            System.out.println(train.attribute(1));
+            System.out.println(test.attribute(1));
         }
+        else
+        {
+            eval.evaluateModel(nB, test);
+            testResult = eval.toSummaryString("\nResults of testing\n=======\n", true);
+        }*/
+        System.out.println(train.attribute(1));
+        System.out.println(test.attribute(1));
         eval.evaluateModel(nB, test);
         testResult = eval.toSummaryString("\nResults of testing\n=======\n", true);
     }

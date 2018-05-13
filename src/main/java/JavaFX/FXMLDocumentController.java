@@ -42,7 +42,6 @@ public class FXMLDocumentController implements Initializable {
     private ObservableList<String> options;
     private List<FileHandler> fileHandlers = new ArrayList<>();
     private FileChooser fc;
-    //private AlgorithmsWEKA WEKA = new AlgorithmsWEKA();
     private FileHandler currentlySelectedFile = null;
     private ProcessData dataPruner = new ProcessData();
     private int currentFileIndex;
@@ -56,8 +55,6 @@ public class FXMLDocumentController implements Initializable {
     private Button RemoveBtn;
     @FXML
     private ComboBox FilesComboBox;
-    @FXML
-    private Label label;
     @FXML
     private void removeSelectedFile(ActionEvent e1)
     {

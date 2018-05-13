@@ -1,5 +1,6 @@
 package WEKALogic;
 
+import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
@@ -19,7 +20,7 @@ public class FileHandler
     private List<Instance> instanceList = new ArrayList();
     private ConverterUtils.DataSource source;
     private Instances data;
-
+    private ArrayList<Attribute> headerAtts = new ArrayList<>();
     public FileHandler()
     {
         initializeOptionArray();
@@ -43,7 +44,7 @@ public class FileHandler
         data = Filter.useFilter(data, remove);
         data = numericToNominal(data);
         data.setClassIndex(data.numAttributes() - 1);
-
+        createAttributeArray();
         for (int i = 0; i < data.numInstances(); i++) {
             instanceList.add(data.get(i));
         }
@@ -52,6 +53,10 @@ public class FileHandler
         fileCount++;
     }
 
+    private void createAttributeArray()
+    {
+        //data.enumerateAttributes()
+    }
     public int getFileCount()
     {
         return this.fileCount;
@@ -108,17 +113,20 @@ public class FileHandler
         {
             e.printStackTrace();
         }
-        /*  Only for debugging purposes
+        /*
+        //  Only for debugging purposes
         System.out.println("Before");
         for(int i=0; i<2; i=i+1)
         {
-            System.out.println("Nominal? "+instance.attribute(i).isNominal());
+            //System.out.println("String? "+instance.attribute(i).isString());
+            System.out.println(instance.attribute(i).type());
         }
 
         System.out.println("After");
         for(int i=0; i<2; i=i+1)
         {
-            System.out.println("Nominal? "+newInstance.attribute(i).isNominal());
+            //System.out.println("Nominal? "+newInstance.attribute(i).isNominal());
+            System.out.println(newInstance.attribute(i).type());
         }*/
 
         return newInstance;
