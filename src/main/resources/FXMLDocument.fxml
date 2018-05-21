@@ -83,6 +83,6 @@
             <Button fx:id="RemoveBtn" mnemonicParsing="false" onAction="#removeSelectedFile" text="Remove file" />
             <ComboBox id="FilesComboBox" fx:id="FilesComboBox" onAction="#comboBoxChanged" prefWidth="150.0" />
          </items></ToolBar>
-      <TextArea fx:id="textOutputArea" layoutX="210.0" layoutY="60.0" prefHeight="399.0" prefWidth="774.0" />
+      <!-- <TextArea fx:id="textOutputArea" layoutX="210.0" layoutY="60.0" prefHeight="399.0" prefWidth="774.0" /> -->
    </children>
 </AnchorPane>

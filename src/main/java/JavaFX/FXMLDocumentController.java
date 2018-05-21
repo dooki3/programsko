@@ -5,14 +5,12 @@
  */
 package JavaFX;
 
-import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import WEKALogic.AlgorithmsWEKA;
 import WEKALogic.FileHandler;
 import WEKALogic.ProcessData;
 import javafx.collections.FXCollections;
@@ -20,7 +18,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXML;
@@ -43,12 +40,12 @@ public class FXMLDocumentController implements Initializable {
     private List<FileHandler> fileHandlers = new ArrayList<>();
     private FileChooser fc;
     private FileHandler currentlySelectedFile = null;
-    private ProcessData dataPruner = new ProcessData();
+    private ProcessData dataPruner;
     private int currentFileIndex;
-
+    TextArea testTextArea;
 
     @FXML
-    private TextArea textOutputArea;
+    private AnchorPane rootPane;
     @FXML
     private VBox checkBoxes;
     @FXML
@@ -126,7 +123,7 @@ public class FXMLDocumentController implements Initializable {
             }
             else
             {
-                textOutputArea.setText(textOutputArea.getText() + "\n" + "WARNING: File " + selectedFile.getName() + " is already open!");
+                testTextArea.setText(testTextArea.getText() + "\n" + "WARNING: File " + selectedFile.getName() + " is already open!");
             }
         }
         else
@@ -162,9 +159,6 @@ public class FXMLDocumentController implements Initializable {
             try
             {
                 dataPruner.buildPredictionModel(getSelectedFiles(fileHandlers));
-                textOutputArea.setText(textOutputArea.getText() + "\n" + dataPruner.getTrainResult() +
-                        "\n\n" + dataPruner.getTestResult());
-                textOutputArea.positionCaret(textOutputArea.getLength());
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
@@ -220,10 +214,19 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @Override
-    public void initialize(URL url, ResourceBundle rb){}
+    public void initialize(URL url, ResourceBundle rb){
+        testTextArea = new TextArea();
+        testTextArea.setLayoutX(210);
+        testTextArea.setLayoutY(60);
+        testTextArea.setPrefHeight(399);
+        testTextArea.setPrefWidth(774);
+        rootPane.getChildren().add(testTextArea);
+        dataPruner = new ProcessData(this);
+    }
     // Constructor
     public FXMLDocumentController()
     {
+
         options = FXCollections.observableArrayList();
     }
 
@@ -233,5 +236,9 @@ public class FXMLDocumentController implements Initializable {
         CheckBox box = new CheckBox(fileName);
         box.setText(fileName);
         checkBoxes.getChildren().add(box);
+    }
+
+    public TextArea getTextOutputArea() {
+        return testTextArea;
     }
 }

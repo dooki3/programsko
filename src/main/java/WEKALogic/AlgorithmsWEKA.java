@@ -1,6 +1,8 @@
 package WEKALogic;
 
 
+import JavaFX.FXMLDocumentController;
+import javafx.scene.control.TextArea;
 import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
@@ -13,10 +15,16 @@ import java.util.Random;
 
 public class AlgorithmsWEKA
 {
-    private String trainModelResult = "";
     private String testResult = "";
     private NaiveBayes nB = null;
+    FXMLDocumentController controller;
 
+    TextArea txt = null;
+
+    public AlgorithmsWEKA(FXMLDocumentController controller)
+    {
+        this.controller = controller;
+    }
 
     protected void gaussianProcesses(Instances data) throws Exception
     {
@@ -44,38 +52,24 @@ public class AlgorithmsWEKA
         nB.buildClassifier(instance);
         Evaluation eval = new Evaluation(instance);
         eval.crossValidateModel(nB, instance, 10, new Random(1));
-        trainModelResult = eval.toSummaryString("\nResults of training\n=======\n", true);
+        //trainModelResult = eval.toSummaryString("\nResults of training\n=======\n", true);
     }
 
     protected void naiveBayes(Instances train, Instances test) throws Exception
     {
-        train.setClassIndex(train.numAttributes() - 1);
-        test.setClassIndex(test.numAttributes() - 1);
         nB = new NaiveBayes();
         nB.buildClassifier(train);
         Evaluation eval = new Evaluation(train);
-        /*if(!train.equalHeaders(test))
-        {
-            System.out.println(train.equalHeadersMsg(test));
-            System.out.println(train.attribute(1));
-            System.out.println(test.attribute(1));
-        }
-        else
-        {
-            eval.evaluateModel(nB, test);
-            testResult = eval.toSummaryString("\nResults of testing\n=======\n", true);
-        }*/
-        System.out.println(train.attribute(1));
-        System.out.println(test.attribute(1));
         eval.evaluateModel(nB, test);
+        eval.predictions().toArray();
         testResult = eval.toSummaryString("\nResults of testing\n=======\n", true);
+        printResults();
     }
 
-    public String getTrainResult() {
-        return trainModelResult;
-    }
-
-    public String getTestResult() {
-        return testResult;
+    private void printResults()
+    {
+        txt = controller.getTextOutputArea();
+        txt.setText(txt.getText() + "\n\n\n" + testResult);
+        txt.positionCaret(txt.getLength());
     }
 }
