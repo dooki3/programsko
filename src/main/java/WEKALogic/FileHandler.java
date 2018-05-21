@@ -71,7 +71,7 @@ public class FileHandler
     // to do with it, since it can create very improper Instances objects, as well as create exceptions
     protected static Instances convertValues(Instances instance, convertMethods conv, String columns)
     {
-        Filter convert = null;
+        Filter convert;
         Instances dataOut = null;
         String[] options = new String[2];
         options[0] = "-R";
@@ -101,6 +101,8 @@ public class FileHandler
         {
             e.printStackTrace();
         }
+        //System.out.println("Attribute 1: isNominal - " + dataOut.attribute(0).isNominal());
+        //System.out.println("Attribute 1: isString - " + dataOut.attribute(0).isString());
         return dataOut;
     }
 

@@ -1,7 +1,6 @@
 package WEKALogic;
 // This is the class in which the datasets will be examined and pruned regarding the requested requirements
 
-
 import JavaFX.FXMLDocumentController;
 import weka.core.Attribute;
 import weka.core.DenseInstance;
@@ -15,7 +14,7 @@ import java.util.*;
 public class ProcessData extends AlgorithmsWEKA{
 
     private Thread t1;
-    private Map<String, String> allInstances = new LinkedHashMap<>();
+    private Map<String, Double> allInstances = new LinkedHashMap<>();
     private Instances prunedDataset = null;
     private Instances set1, set2;
 
@@ -23,6 +22,7 @@ public class ProcessData extends AlgorithmsWEKA{
     {
         super(controller);
     }
+
     // The purpose of this is to collect all the data that contains bugs in the dataset, which were found in both the first and the second
     // or only in the second dataset.
     // This method returns the dataset instance which contains all the Instance objects with a bug_cnt > 0 condition
@@ -30,27 +30,27 @@ public class ProcessData extends AlgorithmsWEKA{
     public Instances pruneDataSet(Instances first, Instances second)     //Deprecated, using different method because of dataset header incompatibilities
     {
         String key;
-        String value;
+        double value;
 
-        for (int i = 0; i < first.size(); i++)
+        for (int i = 0; i < first.size() - 1; i++)
         {
             key = first.get(i).stringValue(first.attribute("File"));
-            value = first.get(i).stringValue(first.attribute("bug_cnt"));
-            if(!value.equals("0"))
+            value = first.get(i).value(1);
+            if(value != 0)
             {
                 allInstances.put(key, value);
             }
         }
 
-        for (int j = 0; j < second.size(); j++)
+        for (int j = 0; j < second.size() - 1; j++)
         {
             key = second.get(j).stringValue(second.attribute("File"));
-            value = second.get(j).stringValue(second.attribute("bug_cnt"));
-            if(!value.equals("0"))
+            value = second.get(j).value(1);
+            if(value != 0)
             {
                 allInstances.put(key, value);
             }
-            if(allInstances.containsKey(key) && !allInstances.get(key).equals("0") && value.equals("0"))
+            if(allInstances.containsKey(key) && allInstances.get(key)!= 0 && value == 0)
             {
                 allInstances.remove(key);
             }
@@ -59,48 +59,33 @@ public class ProcessData extends AlgorithmsWEKA{
         Instances newInstance = createNewInstance();
         return newInstance;
     }
-    private Instances splitDataset(Instances set, int start, int howMany)
-    {
-        Instances splitDataset = new Instances(set, start - 1, howMany);
-        return splitDataset;
-    }
-    private Instances filterDataset(Instances dataIn) throws Exception
-    {
-        Instances newData;
-        Remove remove = new Remove();
-        int[] indicesOfColumnsToUse = new int[] {0};
-        remove.setAttributeIndicesArray(indicesOfColumnsToUse);
-        remove.setInputFormat(dataIn);
-        remove.setInvertSelection(true);
-        newData = Filter.useFilter(dataIn, remove);
-        return newData;
-    }
     // This method creates a new Instance file from the hashmap of the pruned dataset we've collected
     private Instances createNewInstance()
     {
         ArrayList<Attribute> attributes = new ArrayList<>();
-        String str = set2.attribute(1).toString();
-        String[] s=str.split("\\D+");
-
-        ArrayList<String> listofAttr = new ArrayList<>();
-        for (int i = 1; i < s.length; i++)
-        {
-            listofAttr.add(s[i]);
-        }
-        attributes.add(new Attribute("File", true));
-        attributes.add(new Attribute("bug_cnt", listofAttr));
-        Instances dataRaw = new Instances("PrunedFile", attributes, 0);
-
-
-        for (Map.Entry<String, String> entry : allInstances.entrySet())
+        ArrayList<String> fileNames = new ArrayList<>();
+        ArrayList<String> valuesofBug = new ArrayList<>();
+        valuesofBug.add("0");
+        valuesofBug.add("1");
+        for (Map.Entry<String, Double> entry : allInstances.entrySet())
         {
             String fileName = entry.getKey();
-            String value = entry.getValue();
+            fileNames.add(fileName);
+        }
+        attributes.add(new Attribute("File", fileNames));
+        attributes.add(new Attribute("bug_cnt", valuesofBug));
+        Instances dataRaw = new Instances("PrunedFile", attributes, 0);
+
+        for (Map.Entry<String, Double> entry : allInstances.entrySet())
+        {
+            String fileName = entry.getKey();
+            double value = entry.getValue();
 
             Instance i = new DenseInstance(attributes.size());
             i.setDataset(dataRaw);
             i.setValue(attributes.get(0), fileName);
             i.setValue(attributes.get(1), value);
+            //i.setValue(attributes.get(0), value);
 
             dataRaw.add(i);
             dataRaw.setClassIndex(dataRaw.numAttributes() - 1);
@@ -108,32 +93,37 @@ public class ProcessData extends AlgorithmsWEKA{
         return dataRaw;
     }
 
+    private Instances filterDatasets(Instances dataIn) throws Exception
+    {
+        Instances dataOut = null;
+        Remove remove = new Remove();
+        int[] indicesOfColumnsToUse = new int[] {1};
+        remove.setAttributeIndicesArray(indicesOfColumnsToUse);
+        remove.setInvertSelection(true);
+        remove.setInputFormat(dataIn);
+        dataOut = Filter.useFilter(dataIn, remove);
+        return dataOut;
+    }
+
     public void buildPredictionModel(List<Instances> list)
     {
         set1 = list.get(0);
         set2 = list.get(1);
+        prunedDataset = pruneDataSet(set1, set2);
+
+        try {
+            prunedDataset = filterDatasets(prunedDataset);
+            set2 = filterDatasets(set2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //prunedDataset = convertValues(prunedDataset, FileHandler.convertMethods.NUMERIC_TO_BINARY, "2");
         t1 = new Thread(() ->
         {
-            /*
-            prunedDataset = pruneDataSet(set1, set2);
-            prunedDataset = FileHandler.stringToNominal(prunedDataset);
             try
             {
-                //prunedDataset = filterDataset(prunedDataset);
-                set2 = filterDataset(set2);
-                System.out.println(prunedDataset.get(0).stringValue(prunedDataset.attribute(0)));
-                System.out.println(set2.get(0).stringValue(set2.attribute(0)));
-            } catch (Exception e)
-            {
-                e.printStackTrace();
-            }
-            */
-            try
-            {
-                set1 = filterDataset(set1);
-                set2 = filterDataset(set2);
-                //runEvaluation(prunedDataset, set2);
-                runEvaluation(set1, set2);
+                runEvaluation(prunedDataset, set2);
+                //runEvaluation(set1, set2);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -150,29 +140,3 @@ public class ProcessData extends AlgorithmsWEKA{
         return prunedDataset;
     }
 }
-
-
-/*
-    private Instances combineDatasets(Instances set1, Instances set2) // This is used to avoid WEKA dataset incompatibilities because of different headers
-    {
-        Instances combinedDataset = new Instances(set2);
-        for(int i = 0; i < set1.numInstances(); i++)
-        {
-            combinedDataset.add(combinedDataset.numInstances(), set1.get(i));
-        }
-        System.out.println(set1.size());
-        System.out.println(set2.size());
-        System.out.println(combinedDataset.size());
-
-        combinedDataset = splitDataset(combinedDataset, set2.numInstances() + 1, set1.numInstances());
-        System.out.println(prunedDataset.attribute("bug_cnt"));
-        System.out.println(combinedDataset.attribute("bug_cnt"));
-        for (int i = 0; i < combinedDataset.numInstances(); i++)
-        {
-            //System.out.println(i);
-            String value = prunedDataset.get(i).stringValue(prunedDataset.attribute("bug_cnt"));
-            combinedDataset.get(i).setValue(combinedDataset.attribute("bug_cnt"), value);
-        }
-        return combinedDataset;
-    }
-*/
