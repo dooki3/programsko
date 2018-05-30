@@ -96,7 +96,7 @@ public class FXMLDocumentController implements Initializable {
     {
         t2 = new Thread(() ->
         {
-            //dataPruner.buildPredictionModel(getSelectedFiles(fileHandlers));
+            dataPruner.buildPredictionModel(getSelectedFiles(fileHandlers));
         });
         t2.start();
     }
