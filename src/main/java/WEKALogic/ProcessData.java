@@ -3,22 +3,18 @@ package WEKALogic;
 
 import JavaFX.FXMLDocumentController;
 import weka.core.Attribute;
-import weka.core.DenseInstance;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class ProcessData extends AlgorithmsWEKA{
 
-    private Thread t1, t2;
+    private Thread t1;
     private Instances prunedDataset = null;
     private Instances set1, set2;
-    //private ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public ProcessData(FXMLDocumentController controller)
     {
@@ -60,7 +56,7 @@ public class ProcessData extends AlgorithmsWEKA{
                 String bugCount = bigDatasetInstance.stringValue(49);
                 if(bigDatasetInstance.stringValue(bigDatasetInstance.attribute(0)).equals(smallDatasetInstance.stringValue(smallDatasetInstance.attribute(0))))
                 {
-                    // Ako se imena instanci podudaraju (ista instanca)
+                    // If filenames are the same
                     if (bugCount.equals("1"))
                     {
                         // Add to new dataset
@@ -71,7 +67,7 @@ public class ProcessData extends AlgorithmsWEKA{
                     {
                         for (int z = 1; z < bigger.numAttributes() - 1; z++)
                         {
-                            // Prodi kroz sve atribute i ako su svi isti, dodaj instancu u dataset
+                            // Pass all attributes and check if they are equal, if they are then add the instance to dataset
                             double val1, val2;
                             val1 = smaller.get(j).value(smaller.get(j).attribute(z));
                             val2 = bigger.get(i).value(bigger.get(i).attribute(z));
@@ -86,7 +82,7 @@ public class ProcessData extends AlgorithmsWEKA{
                 }
                 else
                 {
-                    // Ako su razliciti file name-ovi
+                    // If filenames are different
                     if (bugCount.equals("1"))
                     {
                         newDataset.add(bigger.get(i));
@@ -106,7 +102,6 @@ public class ProcessData extends AlgorithmsWEKA{
         Remove remove = new Remove();
         int[] indicesOfColumnsToUse = new int[] {0};
         remove.setAttributeIndicesArray(indicesOfColumnsToUse);
-        //remove.setInvertSelection(true);
         remove.setInputFormat(dataIn);
         dataOut = Filter.useFilter(dataIn, remove);
         return dataOut;
@@ -131,18 +126,6 @@ public class ProcessData extends AlgorithmsWEKA{
             }
         });
         t1.start();
-
-        t2 = new Thread(() ->
-        {
-            //runEvaluation(prunedDataset, set2);
-            try
-            {
-                runEvaluation(prunedDataset, set2);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        //t2.start();
     }
 
     public void runEvaluation(Instances train, Instances test) throws Exception

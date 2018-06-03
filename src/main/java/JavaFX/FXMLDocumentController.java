@@ -158,7 +158,11 @@ public class FXMLDocumentController implements Initializable {
         {
             try
             {
-                dataPruner.buildPredictionModel(getSelectedFiles(fileHandlers));
+                List<Instances> selectedFiles = getSelectedFiles(fileHandlers);
+                if(selectedFiles.size() >= 2)
+                {
+                    dataPruner.buildPredictionModel(selectedFiles);
+                }
             } catch (Exception e1) {
                 e1.printStackTrace();
             }
