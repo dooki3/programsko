@@ -7,7 +7,6 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.bayes.NaiveBayesUpdateable;
 import weka.classifiers.functions.GaussianProcesses;
-import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;

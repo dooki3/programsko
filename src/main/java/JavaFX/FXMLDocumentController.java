@@ -35,7 +35,6 @@ import weka.core.Instances;
 public class FXMLDocumentController implements Initializable {
 
     private Thread t1;
-    private Thread t2;
     private ObservableList<String> options;
     private List<FileHandler> fileHandlers = new ArrayList<>();
     private FileChooser fc;
@@ -90,17 +89,6 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
-
-    @FXML
-    private void onPruneClicked()
-    {
-        t2 = new Thread(() ->
-        {
-            dataPruner.buildPredictionModel(getSelectedFiles(fileHandlers));
-        });
-        t2.start();
-    }
-
     // File chooser for pressing the "Add file" image
     @FXML
     public void addFileClicked(MouseEvent event) {

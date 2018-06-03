@@ -21,7 +21,7 @@ public class ProcessData extends AlgorithmsWEKA{
         super(controller);
     }
 
-    private Instances pruneDataSetAlternative(Instances first, Instances second)
+    private Instances pruneDataSet(Instances first, Instances second)
     {
         ArrayList<Attribute> attributes = new ArrayList<>();
         Instances smaller, bigger;
@@ -116,7 +116,7 @@ public class ProcessData extends AlgorithmsWEKA{
         {
             try
             {
-                prunedDataset = pruneDataSetAlternative(set1, set2);
+                prunedDataset = pruneDataSet(set1, set2);
                 prunedDataset = filterDatasets(prunedDataset);
                 set1 = filterDatasets(set1);
                 set2 = filterDatasets(set2);
