@@ -2,6 +2,7 @@ package WEKALogic;
 // This is the class in which the datasets will be examined and pruned regarding the requested requirements
 
 import JavaFX.FXMLDocumentController;
+import javafx.scene.control.TextArea;
 import weka.core.Attribute;
 import weka.core.Instance;
 import weka.core.Instances;
@@ -12,30 +13,19 @@ import java.util.*;
 
 public class ProcessData extends AlgorithmsWEKA{
 
-    private Thread t1;
     private Instances prunedDataset = null;
     private Instances set1, set2;
+    private TextArea txt;
 
     public ProcessData(FXMLDocumentController controller)
     {
         super(controller);
+        txt = controller.getTextOutputArea();
     }
 
     private Instances pruneDataSet(Instances first, Instances second)
     {
         ArrayList<Attribute> attributes = new ArrayList<>();
-        Instances smaller, bigger;
-        if(first.numInstances() <= second.numInstances())
-        {
-            smaller = first;
-            bigger = second;
-        }
-        else
-        {
-            smaller = second;
-            bigger = first;
-        }
-
         // Add all attributes to an arraylist
         for (int i = 0; i < first.numAttributes(); i++)
         {
@@ -45,14 +35,14 @@ public class ProcessData extends AlgorithmsWEKA{
         // Create empty Instances object
         Instances newDataset = new Instances("Pruned dataset", attributes, 0);
 
-        // Go through datasets
-        for (int i = 0; i < bigger.numInstances(); i++)
+        // Go through datasets and add data of interest to the new Instances object
+        for (int i = 0; i < first.numInstances(); i++)
         {
             Instance smallDatasetInstance, bigDatasetInstance;
-            bigDatasetInstance = bigger.get(i);
-            for(int j = 0; j < smaller.numInstances(); j++)
+            bigDatasetInstance = first.get(i);
+            for(int j = 0; j < second.numInstances(); j++)
             {
-                smallDatasetInstance = smaller.get(j);
+                smallDatasetInstance = second.get(j);
                 String bugCount = bigDatasetInstance.stringValue(49);
                 if(bigDatasetInstance.stringValue(bigDatasetInstance.attribute(0)).equals(smallDatasetInstance.stringValue(smallDatasetInstance.attribute(0))))
                 {
@@ -65,28 +55,19 @@ public class ProcessData extends AlgorithmsWEKA{
                     }
                     else
                     {
-                        for (int z = 1; z < bigger.numAttributes() - 1; z++)
+                        for (int z = 1; z < first.numAttributes() - 1; z++)
                         {
                             // Pass all attributes and check if they are equal, if they are then add the instance to dataset
                             double val1, val2;
-                            val1 = smaller.get(j).value(smaller.get(j).attribute(z));
-                            val2 = bigger.get(i).value(bigger.get(i).attribute(z));
+                            val1 = second.get(j).value(second.get(j).attribute(z));
+                            val2 = first.get(i).value(first.get(i).attribute(z));
                             if(val1 != val2) break;
-                            else if(val1 == val2 && z == bigger.numAttributes() - 2)
+                            else if(val1 == val2 && z == first.numAttributes() - 2)
                             {
                                 newDataset.add(bigDatasetInstance);
                                 break;
                             }
                         }
-                    }
-                }
-                else
-                {
-                    // If filenames are different
-                    if (bugCount.equals("1"))
-                    {
-                        newDataset.add(bigger.get(i));
-                        break;
                     }
                 }
             }
@@ -107,25 +88,27 @@ public class ProcessData extends AlgorithmsWEKA{
         return dataOut;
     }
 
-    public void buildPredictionModel(List<Instances> list)
-    {
+    public void buildPredictionModel(List<Instances> list) {
         set1 = list.get(0);
         set2 = list.get(1);
-
-        t1 = new Thread(() ->
+        try
         {
-            try
-            {
-                prunedDataset = pruneDataSet(set1, set2);
-                prunedDataset = filterDatasets(prunedDataset);
-                set1 = filterDatasets(set1);
-                set2 = filterDatasets(set2);
-                runEvaluation(prunedDataset, set2);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-        t1.start();
+            prunedDataset = pruneDataSet(set1, set2);
+            prunedDataset = filterDatasets(prunedDataset);
+            set1 = filterDatasets(set1);
+            set2 = filterDatasets(set2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try
+        {
+            txt.clear();
+            runEvaluation(prunedDataset, set2);
+            runEvaluation(set1, set2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void runEvaluation(Instances train, Instances test) throws Exception

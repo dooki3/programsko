@@ -62,14 +62,14 @@ public class AlgorithmsWEKA
         Evaluation eval = new Evaluation(train);
         eval.evaluateModel(nB, test);
         eval.predictions().toArray();
-        testResult = eval.toSummaryString("\nResults of testing\n=======\n", true);
+        testResult = eval.toSummaryString("\nResults of testing '" + train.relationName() + "'\n=======\n", true);
         printResults();
     }
 
     private void printResults()
     {
         txt = controller.getTextOutputArea();
-        txt.setText(txt.getText() + "\n\n\n" + testResult);
+        txt.setText(txt.getText() + testResult);
         txt.positionCaret(txt.getLength());
     }
 }
