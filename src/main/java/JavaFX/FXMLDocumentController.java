@@ -57,18 +57,29 @@ public class FXMLDocumentController implements Initializable {
     {
         if(e1.getSource().equals(RemoveBtn))
         {
+            String fileName = null;
+            FileHandler tempFile;
             if(currentlySelectedFile != null)
             {
-                currentlySelectedFile.decreaseFileCount();
-                currentlySelectedFile.removeFileInstance();
-                fileHandlers.remove(currentFileIndex);
+                fileName = currentlySelectedFile.getFileName();
                 checkBoxes.getChildren().remove(currentFileIndex);
+                options.remove(fileName);
+                currentlySelectedFile.decreaseFileCount();
+                if(fileHandlers.size() >= 2)
+                {
+                    tempFile = fileHandlers.get(currentFileIndex + 1);
+                    currentlySelectedFile.removeFileInstance();
+                    currentlySelectedFile = tempFile;
+                }
+                else
+                {
+                    currentlySelectedFile.removeFileInstance();
+                    currentlySelectedFile = null;
+                }
+                fileHandlers.remove(currentFileIndex);
+                FilesComboBox.setItems(options);
+                FilesComboBox.getItems();
             }
-            options.remove(currentlySelectedFile.getFileName());
-            FilesComboBox.setItems(options);
-            FilesComboBox.getItems();
-
-
         }
     }
     @FXML
@@ -194,18 +205,6 @@ public class FXMLDocumentController implements Initializable {
         return null;
     }
 
-    private boolean checkIfAlreadyOpened(String fileName)
-    {
-        for(int i = 0; i < fileHandlers.size(); i++)
-        {
-            if(fileHandlers.get(i).getFileName().equals(fileName))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private List<Instances> getSelectedFiles(List<FileHandler> list)
     {
         List<Integer> selectedIndices = new ArrayList<>();
@@ -241,7 +240,6 @@ public class FXMLDocumentController implements Initializable {
     // Constructor
     public FXMLDocumentController()
     {
-
         options = FXCollections.observableArrayList();
     }
 
