@@ -41,6 +41,7 @@ public class FXMLDocumentController implements Initializable {
     private FileHandler currentlySelectedFile = null;
     private ProcessData dataPruner;
     private int currentFileIndex;
+    private List<File> selectedFiles;
     TextArea testTextArea;
 
     @FXML
@@ -96,22 +97,16 @@ public class FXMLDocumentController implements Initializable {
         fc.getExtensionFilters().addAll(
                 new ExtensionFilter("CSV files", "*.csv"),
                 new ExtensionFilter("ARFF files", "*.arff"));
-        File selectedFile = fc.showOpenDialog(null);
+        //File selectedFile = fc.showOpenDialog(null);
+        selectedFiles = fc.showOpenMultipleDialog(null);
 
-        if(selectedFile != null)
+        if(selectedFiles != null)
         {
-            if(!checkIfAlreadyOpened(selectedFile.getName()))
+            try
             {
-                try
-                {
-                    updateGUIonFileAdd(selectedFile);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else
-            {
-                testTextArea.setText(testTextArea.getText() + "\n" + "WARNING: File " + selectedFile.getName() + " is already open!");
+                updateGUIonFileAdd(selectedFiles);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         else
@@ -119,29 +114,49 @@ public class FXMLDocumentController implements Initializable {
             System.out.println("Failed to select file");
         }
     }
-    private void updateGUIonFileAdd(File selectedFile) throws Exception
+    private void updateGUIonFileAdd(List<File> selectedFiles) throws Exception
     {
+        String filename = null;
         // Adding a FileHandler class object to the list of filehandlers, essentially keeping tabs on all the files currently loaded
-        String filename = selectedFile.getName();
-        FileHandler newFile = new FileHandler();
-        newFile.setFileName(filename);
-        fileHandlers.add(newFile);
-        newFile.loadFile(selectedFile.getAbsolutePath());
-        options.add(filename);
-        FilesComboBox.setItems(options);
-        FilesComboBox.getItems();
-        currentlySelectedFile = newFile;
 
-        addChildToPane(filename);
+        for (int i = 0; i < selectedFiles.size(); i++)
+        {
+            filename = selectedFiles.get(i).getName();
+            boolean canWeAddItPlease = true;
+            for(int j = 0; j < fileHandlers.size(); j++)
+            {
+                if(selectedFiles.get(i).getName().equals(fileHandlers.get(j).getFileName()))
+                {
+                    System.out.println(filename + " is already open");
+                    canWeAddItPlease = false;
+                    break;
+                }
+            }
+            if(canWeAddItPlease)
+            {
+                addToFileHandlers(filename, i);
+            }
+        }
         // Only for debugging purposes, will delete later on
-        System.out.println("Successfully loaded file " + selectedFile.getName() + "!");
         System.out.println("Currently " + fileHandlers.size() + " files are loaded in the programs memory");
         System.out.println("This is what the object holds: " + fileHandlers.get(0).getFileCount());
     }
 
-    // Running this process in another thread so that the algorithm doesn't block the GUI
-    public void runAlgorithmsClicked(MouseEvent e)
+    private void addToFileHandlers(String filename, int index) throws Exception
     {
+        FileHandler newFile = new FileHandler();
+        newFile.setFileName(filename);
+        fileHandlers.add(newFile);
+        newFile.loadFile(selectedFiles.get(index).getAbsolutePath());
+        options.add(filename);
+        FilesComboBox.setItems(options);
+        FilesComboBox.getItems();
+        if(index == 0) currentlySelectedFile = newFile;
+        addChildToPane(filename);
+        System.out.println("Successfully loaded file(s) " + filename + "!");
+    }
+    // Running this process in another thread so that the algorithm doesn't block the GUI
+    public void runAlgorithmsClicked(MouseEvent e) throws InterruptedException {
         t1 = new Thread(() ->
         {
             try
@@ -155,7 +170,15 @@ public class FXMLDocumentController implements Initializable {
                 e1.printStackTrace();
             }
         });
-        t1.start();
+        System.out.println("Thread is alive: " + t1.isAlive());
+        if(!t1.isAlive())
+        {
+            t1.start();
+        }
+        else
+        {
+            t1.join();
+        }
     }
 
     private FileHandler findFileByName(String filename, List<FileHandler> list)
