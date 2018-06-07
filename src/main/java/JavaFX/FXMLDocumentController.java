@@ -57,17 +57,16 @@ public class FXMLDocumentController implements Initializable {
     {
         if(e1.getSource().equals(RemoveBtn))
         {
-            String fileName = null;
+            String fileName;
             FileHandler tempFile;
+            int tempIndex = currentFileIndex;
             if(currentlySelectedFile != null)
             {
                 fileName = currentlySelectedFile.getFileName();
-                checkBoxes.getChildren().remove(currentFileIndex);
-                options.remove(fileName);
-                currentlySelectedFile.decreaseFileCount();
                 if(fileHandlers.size() >= 2)
                 {
-                    tempFile = fileHandlers.get(currentFileIndex + 1);
+                    if(currentFileIndex == fileHandlers.size() - 1) { currentFileIndex--; }
+                    tempFile = fileHandlers.get(currentFileIndex);
                     currentlySelectedFile.removeFileInstance();
                     currentlySelectedFile = tempFile;
                 }
@@ -76,7 +75,10 @@ public class FXMLDocumentController implements Initializable {
                     currentlySelectedFile.removeFileInstance();
                     currentlySelectedFile = null;
                 }
-                fileHandlers.remove(currentFileIndex);
+                fileHandlers.remove(tempIndex);
+                checkBoxes.getChildren().remove(tempIndex);
+                options.remove(fileName);
+                FilesComboBox.getSelectionModel().select(currentFileIndex);
                 FilesComboBox.setItems(options);
                 FilesComboBox.getItems();
             }
@@ -162,7 +164,11 @@ public class FXMLDocumentController implements Initializable {
         options.add(filename);
         FilesComboBox.setItems(options);
         FilesComboBox.getItems();
-        if(index == 0) currentlySelectedFile = newFile;
+        if(index == 0)
+        {
+            currentlySelectedFile = newFile;
+            FilesComboBox.getSelectionModel().selectFirst();
+        }
         addChildToPane(filename);
         System.out.println("Successfully loaded file(s) " + filename + "!");
     }

@@ -31,18 +31,10 @@ public class FileHandler
     // Removes the file from memory -> hopefully garbage collector understands this as a cue to delete the files from memory.
     public void removeFileInstance()
     {
+        if(fileCount > 0) { fileCount--; }
         this.source = null;
         this.data = null;
     }
-
-    public void decreaseFileCount()
-    {
-        if(fileCount > 0)
-        {
-            fileCount--;
-        }
-    }
-
     // ATTENTION: It is expected that the ones invoking this method know what they're doing, and what they're expecting
     // to do with it, since it can create very improper Instances objects, as well as create exceptions
     protected static Instances convertValues(Instances instance, convertMethods conv, String columns)
