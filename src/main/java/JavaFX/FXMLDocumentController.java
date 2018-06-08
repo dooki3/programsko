@@ -10,6 +10,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import WEKALogic.FileHandler;
 import WEKALogic.ProcessData;
@@ -42,6 +45,7 @@ public class FXMLDocumentController implements Initializable {
     private ProcessData dataPruner;
     private int currentFileIndex;
     private List<File> selectedFiles;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     TextArea testTextArea;
 
     @FXML
@@ -187,15 +191,8 @@ public class FXMLDocumentController implements Initializable {
                 e1.printStackTrace();
             }
         });
-        System.out.println("Thread is alive: " + t1.isAlive());
-        if(!t1.isAlive())
-        {
-            t1.start();
-        }
-        else
-        {
-            t1.join();
-        }
+        //System.out.println("Thread is alive: " + t1.isAlive());
+        executor.execute(t1);
     }
 
     private FileHandler findFileByName(String filename, List<FileHandler> list)
