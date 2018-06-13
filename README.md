@@ -4,5 +4,6 @@
   * ukoliko file ima grešku stavljamo ga u očišćeni dataset
   * ukoliko file nema grešku te se njegove metrike podudaraju sa metrikama iz idućeg dataseta (file nije mijenjan) stavljamo ga u očišćeni dataset
   * ukoliko file nema greške te se njegove metrike ne podudaraju sa metrikama iz idućeg dataseta (file je izmijenjen) ne stavljamo ga u očišćeni dataset
- Nakon dobivenih očišćenih datasetova trebalo je izvršiti algoritam na originalnim (neočišćenim datasetovima) i očišćenim datasetovima te usporediti rezultate. Rezultati nam pokazuju točnost algoritma u procijeni pojave grešaka na očišćenom datasetu i na originalnom datasetu te iz njih možemo zaključiti jeli isplativo čistiti datasetove ili ne.
+
+Nakon dobivenih očišćenih datasetova trebalo je izvršiti algoritam na originalnim (neočišćenim datasetovima) i očišćenim datasetovima te usporediti rezultate. Rezultati nam pokazuju točnost algoritma u procijeni pojave grešaka na očišćenom datasetu i na originalnom datasetu te iz njih možemo zaključiti jeli isplativo čistiti datasetove ili ne.
 
