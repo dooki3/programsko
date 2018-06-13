@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import WEKALogic.FileHandler;
 import WEKALogic.ProcessData;
@@ -109,12 +108,11 @@ public class FXMLDocumentController implements Initializable {
     }
     // File chooser for pressing the "Add file" image
     @FXML
-    public void addFileClicked(MouseEvent event) {
+    public void addFileClicked() {
         fc = new FileChooser();
         fc.getExtensionFilters().addAll(
                 new ExtensionFilter("CSV files", "*.csv"),
                 new ExtensionFilter("ARFF files", "*.arff"));
-        //File selectedFile = fc.showOpenDialog(null);
         selectedFiles = fc.showOpenMultipleDialog(null);
 
         if(selectedFiles != null)
@@ -133,9 +131,8 @@ public class FXMLDocumentController implements Initializable {
     }
     private void updateGUIonFileAdd(List<File> selectedFiles) throws Exception
     {
-        String filename = null;
+        String filename;
         // Adding a FileHandler class object to the list of filehandlers, essentially keeping tabs on all the files currently loaded
-
         for (int i = 0; i < selectedFiles.size(); i++)
         {
             filename = selectedFiles.get(i).getName();
@@ -177,7 +174,8 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("Successfully loaded file(s) " + filename + "!");
     }
     // Running this process in another thread so that the algorithm doesn't block the GUI
-    public void runAlgorithmsClicked(MouseEvent e) throws InterruptedException {
+    public void runAlgorithmsClicked()
+    {
         t1 = new Thread(() ->
         {
             try
@@ -191,7 +189,6 @@ public class FXMLDocumentController implements Initializable {
                 e1.printStackTrace();
             }
         });
-        //System.out.println("Thread is alive: " + t1.isAlive());
         executor.execute(t1);
     }
 
