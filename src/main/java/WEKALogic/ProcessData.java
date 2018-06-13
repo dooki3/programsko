@@ -88,7 +88,7 @@ public class ProcessData extends AlgorithmsWEKA{
         return dataOut;
     }
 
-    public void buildPredictionModel(List<Instances> list) {
+    public synchronized void buildPredictionModel(List<Instances> list) {
         set1 = list.get(0);
         set2 = list.get(1);
         try

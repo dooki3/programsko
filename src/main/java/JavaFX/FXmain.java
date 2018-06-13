@@ -10,23 +10,29 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  *
  * @author Karlo
  * @author dinok
  */
-public class JavaFXApplication6 extends Application {
+public class FXmain extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("FXMLDocument.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXMLDocument.fxml"));
+        //loader.setController(new FXMLDocumentController());
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         stage.setTitle("Analiza algoritama");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+        stage.setOnCloseRequest((WindowEvent event) ->
+        {
+            FXMLDocumentController.getExecutor().shutdown();
+        });
     }
 
     /**

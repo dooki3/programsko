@@ -44,8 +44,14 @@ public class FXMLDocumentController implements Initializable {
     private ProcessData dataPruner;
     private int currentFileIndex;
     private List<File> selectedFiles;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final ExecutorService executor = Executors.newSingleThreadExecutor();
     TextArea testTextArea;
+
+    public static ExecutorService getExecutor() {
+        return executor;
+    }
+
+
 
     @FXML
     private AnchorPane rootPane;
@@ -86,11 +92,6 @@ public class FXMLDocumentController implements Initializable {
                 FilesComboBox.getItems();
             }
         }
-    }
-    @FXML
-    private void zatvori(ActionEvent event) {
-        // TODO implement exiting of threads when clicking exit, so that the threads don't keep the program on
-       System.exit(0);
     }
 
     @FXML
@@ -174,21 +175,8 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("Successfully loaded file(s) " + filename + "!");
     }
     // Running this process in another thread so that the algorithm doesn't block the GUI
-    public void runAlgorithmsClicked()
+    public synchronized void runAlgorithmsClicked()
     {
-        t1 = new Thread(() ->
-        {
-            try
-            {
-                List<Instances> selectedFiles = getSelectedFiles(fileHandlers);
-                if(selectedFiles.size() >= 2)
-                {
-                    dataPruner.buildPredictionModel(selectedFiles);
-                }
-            } catch (Exception e1) {
-                e1.printStackTrace();
-            }
-        });
         executor.execute(t1);
     }
 
@@ -241,6 +229,19 @@ public class FXMLDocumentController implements Initializable {
     public FXMLDocumentController()
     {
         options = FXCollections.observableArrayList();
+        t1 = new Thread(() ->
+        {
+            try
+            {
+                List<Instances> selectedFiles = getSelectedFiles(fileHandlers);
+                if(selectedFiles.size() >= 2)
+                {
+                    dataPruner.buildPredictionModel(selectedFiles);
+                }
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
     }
 
     // FXML dynamic addition of checkboxes
