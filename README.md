@@ -11,10 +11,12 @@ Nakon dobivenih očišćenih datasetova trebalo je izvršiti algoritam na origin
 
 
 ## Pokretanje  
-Da bi se aplikacija pokrenula, potrebno je samo pokrenuti aplikaciju iz foldera pritiskom na "BugImpactAnalysis.exe".
+Da bi se aplikacija pokrenula, potrebno je samo pokrenuti aplikaciju iz foldera pritiskom na "BugImpactAnalysis.exe"
+koja će biti priložena u zip-u.
+
 Alternativno, moguće je pokrenuti kod iz željenog IDE-a ukoliko prva opcija ne radi.  
 
-###Korištenje aplikacije:
+#### Korištenje aplikacije:
 
 * Prvo se učitaju datoteke pritiskom na ikonu u gornjem lijevom kutu.
 * Odabrane datoteke pojavljuju se u prozoričiću sa checkboxovima
@@ -24,7 +26,7 @@ Alternativno, moguće je pokrenuti kod iz željenog IDE-a ukoliko prva opcija ne
 * Na ekranu će se prikazati rezultati, prvi se odnosi na rezultat dataseta koji smo očistili,  
 a drugi na originalni dataset koji smo učitali.
 
-###Dodatne opcije:
+#### Dodatne opcije:
 
 * Brisanje datoteka radi se odabirom datoteke iz padajućeg izbornika i pritiskom na gumb "Remove File"
 * Ukoliko želite mijenjati redoslijed datoteka u svrhu usporedbe starijih verzija, jednostavno ih pobrišite, i učitajte 
